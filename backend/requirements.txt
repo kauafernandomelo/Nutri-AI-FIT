@@ -1,0 +1,27 @@
+# ===== Núcleo da API =====
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.30
+python-multipart>=0.0.9          # upload de arquivos (foto da refeição)
+
+# ===== Banco de dados / ORM / migrações =====
+SQLAlchemy>=2.0,<2.1
+alembic>=1.13
+psycopg2-binary>=2.9            # driver PostgreSQL
+
+# ===== Validação / configuração =====
+pydantic>=2.7,<3.0
+pydantic-settings>=2.3
+email-validator>=2.1            # valida EmailStr
+
+# ===== Segurança =====
+PyJWT>=2.8                      # tokens JWT
+bcrypt>=4.1                     # hash de senha
+slowapi>=0.1.9                  # rate limiting
+
+# ===== Integrações (desacopladas — só usadas se ativadas no .env) =====
+boto3>=1.34                     # Cloudflare R2 (API compatível com S3)
+google-genai>=0.3               # Gemini Vision (importado de forma preguiçosa)
+
+# ===== Testes =====
+pytest>=8.2
+httpx>=0.27                     # cliente usado pelo TestClient do FastAPI

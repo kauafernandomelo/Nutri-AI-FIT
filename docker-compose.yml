@@ -1,0 +1,41 @@
+# docker-compose — OPCIONAL / uso futuro.
+# Hoje rodamos nativo (Postgres 18 já instalado). Quando você instalar o Docker
+# Desktop, este arquivo sobe Postgres + API em containers, sem mexer na sua máquina:
+#   docker compose up --build
+#
+# OBS: dentro do Docker, a API fala com o serviço 'db' (não com localhost), por
+# isso o DATABASE_URL abaixo usa @db:5432.
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: nutriai
+      POSTGRES_PASSWORD: change_me_in_env   # use um .env do compose em produção
+      POSTGRES_DB: nutriai_fit
+    ports:
+      - "5433:5432"   # 5433 no host para não colidir com seu Postgres 18 local
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nutriai -d nutriai_fit"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: ./backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg2://nutriai:change_me_in_env@db:5432/nutriai_fit
+      SECRET_KEY: troque-por-um-segredo-forte
+      AI_PROVIDER: mock
+      STORAGE_PROVIDER: local
+      PUBLIC_BASE_URL: http://localhost:8000
+      CORS_ORIGINS: "*"
+    ports:
+      - "8000:8000"
+
+volumes:
+  pgdata:

@@ -1,0 +1,33 @@
+name: nutriai_fit
+description: "NutriAI Fit — MVP: foto da refeição, estimativa de calorias com IA e metas fitness."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # Gerenciamento de estado + injeção de dependência
+  flutter_riverpod: ^2.6.1
+  # Navegação declarativa com redirect de autenticação
+  go_router: ^14.6.2
+  # Cliente HTTP (com interceptor de JWT)
+  dio: ^5.7.0
+  # Armazenamento seguro do token (Android Keystore)
+  flutter_secure_storage: ^9.2.4
+  # Câmera / galeria
+  image_picker: ^1.1.2
+  # Formatação de datas/números
+  intl: ^0.20.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true

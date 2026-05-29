@@ -1,0 +1,36 @@
+# ===== Segredos — NUNCA versionar =====
+.env
+.env.*
+!.env.example
+backend/scripts/provision_db.sql        # contém senha real; versionamos só o .example
+
+# ===== Python / Backend =====
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.db
+*.sqlite3
+backend/uploads/                        # storage local de imagens
+
+# ===== Flutter / Mobile =====
+mobile/**/.dart_tool/
+mobile/**/.flutter-plugins
+mobile/**/.flutter-plugins-dependencies
+mobile/**/build/
+mobile/**/.pub-cache/
+mobile/**/.pub/
+mobile/**/ios/Pods/
+mobile/**/android/.gradle/
+mobile/**/android/local.properties
+mobile/**/*.iml
+mobile/**/.idea/
+
+# ===== Editores / SO =====
+.vscode/
+.DS_Store
+Thumbs.db
