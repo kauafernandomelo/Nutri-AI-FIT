@@ -1,30 +1,40 @@
-// This is a basic Flutter widget test.
+// Smoke test do app: sem token salvo, o usuário deve cair na tela de login.
 //
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
+// Trocamos o TokenStorage real (que usa o Keystore via canal de plataforma,
+// indisponível em teste) por um falso em memória.
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:nutriai_fit/core/storage/token_storage.dart';
 import 'package:nutriai_fit/main.dart';
 
+class _FakeTokenStorage extends TokenStorage {
+  String? _token;
+
+  @override
+  Future<String?> readToken() async => _token;
+
+  @override
+  Future<void> saveToken(String token) async => _token = token;
+
+  @override
+  Future<void> clear() async => _token = null;
+}
+
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Sem token salvo, o app cai na tela de login', (tester) async {
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          tokenStorageProvider.overrideWithValue(_FakeTokenStorage()),
+        ],
+        child: const NutriAIApp(),
+      ),
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    // Deixa o AuthController verificar o token e o router redirecionar.
     await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('Entrar'), findsOneWidget);
   });
 }

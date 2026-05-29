@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Política de tráfego de rede (defesa em profundidade).
+
+  Por padrão, TODO tráfego deve ser HTTPS (base-config cleartextTrafficPermitted=false).
+  Abrimos uma exceção para HTTP em texto puro APENAS nos hosts de DESENVOLVIMENTO
+  local — o emulador (10.0.2.2) e a própria máquina (localhost/127.0.0.1). Assim o
+  app conversa com a API local sem afrouxar a segurança em produção.
+
+  Testando em um CELULAR FÍSICO via HTTP? Adicione aqui o IP da sua máquina na
+  rede Wi-Fi (ex.: 192.168.0.10) — ou, melhor, sirva a API por HTTPS.
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">10.0.2.2</domain>
+        <domain includeSubdomains="false">localhost</domain>
+        <domain includeSubdomains="false">127.0.0.1</domain>
+    </domain-config>
+    <base-config cleartextTrafficPermitted="false" />
+</network-security-config>

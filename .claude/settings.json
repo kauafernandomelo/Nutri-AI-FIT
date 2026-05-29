@@ -1,0 +1,21 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              "-e",
+              "let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{try{const j=JSON.parse(d||'{}');const f=(j.tool_input&&j.tool_input.file_path)||'';if(!f)return;if(/(CLAUDE|MEMORY)\\.md$/i.test(f))return;if(/[\\\\/]\\.claude[\\\\/]/.test(f)||/[\\\\/]memory[\\\\/]/.test(f))return;if(!/\\.(dart|ts|tsx|js|jsx|py|sql)$/i.test(f))return;process.stdout.write(JSON.stringify({hookSpecificOutput:{hookEventName:'PostToolUse',additionalContext:'Você alterou código ('+f+'). Se a mudança afetou arquitetura, comandos, fluxo de dados ou convenções, atualize o CLAUDE.md correspondente para manter a documentação em sincronia.'}}));}catch(e){}});"
+            ],
+            "statusMessage": "Checando se o CLAUDE.md precisa atualizar...",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
